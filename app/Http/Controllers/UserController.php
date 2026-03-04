@@ -56,7 +56,16 @@ class UserController extends Controller
     // Profil de l'utilisateur connecté
     public function profile(Request $request)
     {
-        return response()->json($request->user(), 200);
+        // On récupère l'utilisateur connecté
+        $user = $request->user();
+
+        // On charge la relation 'fanzines' définie dans le modèle User
+        // On inclut les données de la table pivot (status, purchased_at)
+        $user->load(['fanzines' => function($query) {
+            $query->withPivot('status', 'purchased_at');
+        }]);
+
+        return response()->json($user, 200);
     }
 
     // Déconnexion (Supprime le token)

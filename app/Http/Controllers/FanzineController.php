@@ -9,7 +9,9 @@ class FanzineController extends Controller
 {
     // Liste de tous les fanzines
     public function index() {
-        return response()->json(Fanzine::all());
+        $fanzines = Fanzine::all();
+        // On force l'encodage UTF-8 et on ignore les caractères malformés pour le POC
+        return response()->json($fanzines, 200, [], JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR);
     }
 
     // Vue d'un fanzine spécifique
